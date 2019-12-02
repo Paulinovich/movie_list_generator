@@ -1,7 +1,7 @@
 # movie-list-generator
 This program makes a data base from all locally stored movies and creates random selections of movies. <br>
 For collective movie watching, every viewer can set a veto against one movie untill one movie remains that will be watched. 
-<br>Written in Python. 
+<br><br>Written in Python. 
 
 ## Project status
 
