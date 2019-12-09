@@ -1,8 +1,6 @@
 import sqlite3
+import os
     
-conn=sqlite3.connect(r'F:\umschulung\Kursen\Objektorientiertes_Programmieren\projekt_filmauswahl\code\movie_db.sqlite')
-cur=conn.cursor()
-
 def maxlengthfilm():
     """
     (none) --> int
@@ -34,7 +32,10 @@ def select_movies(list_names, max_length):
     returns a list of randomly id's of movies in the database that don't exceed the maximum length given (optional).
     The size of this returned list is one more than the amount of spectators.
     """
-    conn=sqlite3.connect(r'F:\umschulung\Kursen\Objektorientiertes_Programmieren\projekt_filmauswahl\code\movie_db.sqlite')
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, "movie_db.sqlite") 
+
+    conn=sqlite3.connect(db_path)
     cur=conn.cursor()
     
     size=len(list_names)+1
@@ -64,7 +65,10 @@ def movie_info_selection(list_movies):
     
     Prints out the interesting information about the selected movies from the database.
     """
-    conn=sqlite3.connect(r'F:\umschulung\Kursen\Objektorientiertes_Programmieren\projekt_filmauswahl\code\movie_db.sqlite')
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, "movie_db.sqlite") 
+
+    conn=sqlite3.connect(db_path)
     cur=conn.cursor()
     
     count=1
@@ -115,10 +119,4 @@ def movie_info_selection(list_movies):
         
 # SELECT * FROM table WHERE id IN (SELECT id FROM table ORDER BY RANDOM() LIMIT x)
     
-#### SOLUTION FOR ABSOLUTE PATH ####    
-#import os.path
-#
-#BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-#db_path = os.path.join(BASE_DIR, "movie_db.db")
-#with sqlite3.connect(db_path) as db:
-        
+

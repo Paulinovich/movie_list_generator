@@ -1,12 +1,8 @@
 import sqlite3
-import panda as pd
+#import panda as pd
 import os, sys
 from stat import *
 
-# Information courtesy of
-# IMDb
-# (http://www.imdb.com).
-# Used with permission.
 
 
 def create_mdb():
@@ -17,8 +13,12 @@ def create_mdb():
 
     #TO CONSIDER: having option for user to create a new database (even when it already existed)?
     """
-    conn=sqlite3.connect(r'F:\umschulung\Kursen\Objektorientiertes_Programmieren\projekt_filmauswahl\code\movie_db.sqlite')
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, "movie_db.sqlite") 
+
+    conn=sqlite3.connect(db_path)
     cur=conn.cursor()
+
     cur.executescript("""
                         CREATE TABLE IF NOT EXISTS year      (y_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                                                               year INTEGER UNIQUE);
@@ -48,8 +48,12 @@ def fill_examles_mdb():
 
     Fills the database with some examples to test its attributes and some functions.
     """
-    conn=sqlite3.connect(r'F:\umschulung\Kursen\Objektorientiertes_Programmieren\projekt_filmauswahl\code\movie_db.sqlite')
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, "movie_db.sqlite") 
+
+    conn=sqlite3.connect(db_path)
     cur=conn.cursor()
+
     cur.executescript("""
                       INSERT INTO year (year) VALUES(2014);
                       INSERT INTO year (year) VALUES(2017);

@@ -23,8 +23,3 @@ def print_users(list_names):
     for user in list_names:
         print(user+"\n")
         
-    
-    
-        
-    
-

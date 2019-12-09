@@ -1,15 +1,20 @@
 import database as db, random_list_users as rlu, random_selection_db as rsdb
 import sqlite3
+#import os.path
 
-conn=sqlite3.connect(r'F:\umschulung\Kursen\Objektorientiertes_Programmieren\projekt_filmauswahl\code\movie_db.sqlite')
-cur=conn.cursor()
+# to connect to the DB with the absolute path without errors. 
+#base_dir = os.path.dirname(os.path.abspath(__file__))
+#db_path = os.path.join(base_dir, "movie_db.sqlite") 
+
+#conn=sqlite3.connect(db_path)
+#cur=conn.cursor()
 
 
 def create_update():
     """
     (none) --> none
     
-    Asks the user if they want to create a new database or update the existing one and executes the funktions doing so.
+    Asks the user if they want to create a new database or update the existing one and executes the functions doing so.
     """
     state=False
     print("to create a new movie database\n-->type 1\n\n")
@@ -18,15 +23,16 @@ def create_update():
         option=input("your choice: ")
         if option=='1':
             db.create_mdb()
-            db.fill_examles_mdb
+            db.fill_examles_mdb()
             state=True
             
         elif option=='2': 
-            #start funktion to update the DB
+            #start function to update the DB
             state=True
     
         else:
             print("wrong input")
+
 
 def selection_programm():
     """
@@ -60,12 +66,12 @@ while state == False:
         selection_programm()
         state=True
         
-        
         #start random input_list_users.py funktion to generate a random list of viewers
     else:
         print("wrong input")
         
 
 
+#create_update()
 
-conn.close() 
+ 
