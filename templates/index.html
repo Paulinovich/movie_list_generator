@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
+     <div class="option">
+          <a href="{{ url_for('dbsetup') }}"> Set up or update the movie database </a>
+     </div>
+
+     <!-- TODO: movieselector only visible if DB exists-->
+     <div class="option">
+          <a href="{{ url_for('movieselector') }}"> Create a new movie list</a>
+     </div>
+
+
+{% endblock %}

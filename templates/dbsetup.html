@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
+
+    <h1>Create your data base</h1>
+
+<!-- let user choose a folder to search for movies and store in the DB
+     we use a form just for now -->  
+
+     <form action="{{ url_for('dbsetup') }}" method="post">
+        <input type="text" name="directory" placeholder="Enter the parent directory where you store all your movies.">
+        <button>Submit</button>
+
+        <!--
+        on submit: 
+        1. make the data base (in the meanwhile alert user to be patient), 
+        2. create a popup if all went well to inform user
+        3. return to index.html
+        --> 
+     </form>
+
+{% endblock %}
