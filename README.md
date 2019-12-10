@@ -1,7 +1,7 @@
 # movie-list-generator
-This program makes a data base from all locally stored movies and creates random selections of movies and collects information from the IMDb website. <br>
-For collective movie watching, every viewer can set a veto against one movie untill one movie remains that will be watched. 
-<br><br>Procedurally written in Python using a sqlite database. Programm will be run in a webbrowser.  
+This program makes a data base from all locally stored movies with information collected from the IMDb website and creates random selections of movies. <br>
+For collective movie watching, every viewer can set a veto against one movie until one movie remains: the one that will be watched. 
+<br><br>Procedurally written in Python using a sqlite database. <br> The programm will be run in a webbrowser on a flask server.  
 
 ## Project status
 
