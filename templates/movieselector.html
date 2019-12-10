@@ -3,7 +3,13 @@
 
 {% block body %}
     <h1>Movie selector</h1>     
+    <form action="{{ url_for(movieselector)}}">
+        <input type="text" name="name">
+        <button>add</button>
+        
 
+    </form>
+    
     <!--
         1: form where users can add one name at a time and press button "add"
         2: all added names are shown on the page
