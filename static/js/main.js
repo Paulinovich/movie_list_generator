@@ -1,4 +1,3 @@
 function giveInfo(){
         return maxlength
-    }
 }

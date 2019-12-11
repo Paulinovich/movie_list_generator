@@ -48,7 +48,7 @@
         <form action="{{ url_for('criteria') }}" method="POST">
             <label class="ask">How much time do you have?</label>
             <label>
-                    <!--TODO: style time input to not show all unneccessary '_', it's ugly.-->
+                    <!--TODO: find better input styling or other input solution, this doesn't work-->
                     Maximum length: <input type="time" name="maxlength" step="5000">
                     <br>
                     <small>Or leave empty if you're flexible.</small>
