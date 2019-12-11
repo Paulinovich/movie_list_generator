@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+    <!--
+        1: form where users can add one name at a time and press button "add"
+        2: all added names are shown on the page
+        3: when at least one name is added, another button shows up to submit the names
+        4: users get asked if they have a maximum length for the movie
+        5: all info is send to functions to create the movie list
+        6: redirect to movieselector
+    -->
+
+{% block body %}
+    <h1>Movie selector</h1>     
+    {% if not names_set %}
+        <form action="{{ url_for('criteria')}}" method="POST">
+            <label class="ask">Who's watching?</label>
+            <p>
+                <label>
+                    Name: <input type="text" name="name" autofocus>
+                    <button name="add">add</button>
+                </label>
+            </p>
+        </form>
+
+        <p>
+            <ul>
+            <!-- TODO: make a table with the names and a button to erase that specific name-->
+            {% for name in names %}
+                <li>{{ name }}</li>
+            {% endfor %}
+            <ul>
+            {% if names|length >0 %}
+            <form action="{{ url_for('criteria')}}" method="POST">
+                <button name="start_over">start over</button>
+            </form>
+            {% endif %}
+        </p>
+
+        {% if names|length >0 %}
+            <form action="{{ url_for('criteria') }}" method="POST">
+                <button name="submit_names">submit the names</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+    <!-- ask for maximum length, hide everything else -->
+    {% if names_set %}
+        <form action="{{ url_for('criteria') }}" method="POST">
+            <label class="ask">How much time do you have?</label>
+            <label>
+                    <!--TODO: style time input to not show all unneccessary '_', it's ugly.-->
+                    Maximum length: <input type="time" name="maxlength" step="5000">
+                    <br>
+                    <small>Or leave empty if you're flexible.</small>
+                    <br><br>
+                    <button name="submit_all">Create your movie list</button>
+            </label>
+
+                
+        </form>
+
+    {% endif %}
+
+{% endblock %}

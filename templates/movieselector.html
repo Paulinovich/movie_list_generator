@@ -2,26 +2,13 @@
 
 
 {% block body %}
-    <h1>Movie selector</h1>     
-    <form action="{{ url_for(movieselector)}}">
-        <input type="text" name="name">
-        <button>add</button>
-        
 
-    </form>
     
     <!--
-        1: form where users can add one name at a time and press button "add"
-        2: all added names are shown on the page
-        3: when at least one name is added, another button shows up to submit the names
-        4: users get asked if they have a maximum length for the movie
-        5: all info is send to functions to create the movie list
-
-        on new page? 
-        6: movies with their information are shown plus one name at the time (fixed at the top of the browser when scrolling down)
-        7: when movie is clicked, pop up window to verify the choice.
-        8: when accepted, the clicked movie is hidden and a new name pops up
-        9: untill only one movie remains, popcorn falling from the sky in the browser
+        1: movies with their information are shown plus one name at the time (fixed at the top of the browser when scrolling down)
+        2: when movie is clicked, pop up window to verify the choice.
+        3: when accepted, the clicked movie is hidden and a new name pops up
+        4: untill only one movie remains, popcorn falling from the sky in the browser
         
     -->
 {% endblock %}
