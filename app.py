@@ -5,6 +5,7 @@ import random
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+# TODO: read more about secret keys and actually make a good one
 app.secret_key = 'secretterces'
 # TODO: check the best session type for app and change if neccesary.
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -27,7 +28,7 @@ def dbsetup():
     elif request.method =="POST":
         # 1. make the data base (in the meanwhile alert user to be patient), 
         # 2. create a popup if all went well to inform user
-        # 3. return to index.html 
+        # 3. return to index.html
         return redirect("/")
 
 @app.route("/criteria", methods=["GET", "POST"])

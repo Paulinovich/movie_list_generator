@@ -18,7 +18,7 @@ def create_mdb():
 
     conn=sqlite3.connect(db_path)
     cur=conn.cursor()
-
+    # TODO: add in table for plot
     cur.executescript("""
                         CREATE TABLE IF NOT EXISTS year      (y_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                                                               year INTEGER UNIQUE);
@@ -145,41 +145,9 @@ def fill_info_mdb():
     (none) ---> none
 
     Checks the correctness of the titles from the movies in the database and searches additional information:
-    year, countries, director, genre andinformation.
+    year, countries, director, genre and plot.
 
     This data is collected with an API to an online database and is saved in the local movie database.
     """
-    #parse through text and place a \ before all 's
+    # for parse through text and place a \ before all 's
 
-
-
-
-    #conn.commit()
-
-
-
-
-# import os
-# for file in os.listdir("/mydir"):
-#     if file.endswith(".txt"):
-#         print(os.path.join("/mydir", file))
-#
-# import os, sys
-# from stat import *
-#
-# def walktree(top, callback):
-#     '''recursively descend the directory tree rooted at top,
-#        calling the callback function for each regular file'''
-#
-#     for f in os.listdir(top):
-#         pathname = os.path.join(top, f)
-#         mode = os.stat(pathname)[ST_MODE]
-#         if S_ISDIR(mode):
-#             # It's a directory, recurse into it
-#             walktree(pathname, callback)
-#         elif S_ISREG(mode):
-#             # It's a file, call the callback function
-#             callback(pathname)
-#         else:
-#             # Unknown file type, print a message
-#             print 'Skipping %s' % pathname
