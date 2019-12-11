@@ -17,8 +17,14 @@
 {% endblock %}
 
 {% block script %}
-<!-- TODO: external script fails to load: 404 not found-->
-<script type="text/javascript" src="../js/main.js"></script>
+<!-- 
+    TODO: external script fails to load: 404 not found
+    - could maybe be permission problems? 
+    https://www.reddit.com/r/node/comments/6q38kf/keep_getting_404_not_found_when_trying_to_link/
+    - or with url_for() method
+    https://stackoverflow.com/questions/46349370/javascript-file-not-found-using-relative-path-during-flask-render-template
+-->
+<script src="../js/main.js"></script>
 <script type="text/javascript">
     var maxlength = {{ data.maxlength }};
     var names = {{ data.names }};
