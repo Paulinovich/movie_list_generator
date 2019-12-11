@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, request, session
 from flask_session.__init__ import Session
-import database as db, random_list_users as rlu, random_selection_db as rsdb
+import database as db, random_selection_db as rsdb
 import random
 
 app = Flask(__name__)
@@ -70,7 +70,7 @@ def criteria():
 
 @app.route("/movieselector")
 def movieselector():
-    return render_template("movieselector.html")
+    return render_template("movieselector.html", data=session)
 
 if __name__ == "__main__":
     app.run(debug=True)

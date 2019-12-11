@@ -8,7 +8,39 @@
         1: movies with their information are shown plus one name at the time (fixed at the top of the browser when scrolling down)
         2: when movie is clicked, pop up window to verify the choice.
         3: when accepted, the clicked movie is hidden and a new name pops up
-        4: untill only one movie remains, popcorn falling from the sky in the browser
-        
+        4: until only one movie remains, popcorn falling from the sky in the browser
     -->
+    <div id="who_picks"></div>
+
+    <button onclick="updateName()">click</button>
+
+{% endblock %}
+
+{% block script %}
+<!-- TODO: external script fails to load: 404 not found-->
+<script type="text/javascript" src="../js/main.js"></script>
+<script type="text/javascript">
+    var maxlength = {{ data.maxlength }};
+    var names = {{ data.names }};
+
+    var indexNames=0;
+    var name = names[indexNames];
+    document.getElementById("who_picks").innerHTML = name;
+
+    function nextName(){
+        if (indexNames < names.length){
+            indexNames++;
+            name = names[indexNames];
+        }
+    }
+    
+    function updateName(){
+        nextName();
+        document.getElementById("who_picks").innerHTML = name;
+    }
+    
+
+
+    
+</script>
 {% endblock %}

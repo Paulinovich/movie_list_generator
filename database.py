@@ -18,7 +18,6 @@ def create_mdb():
 
     conn=sqlite3.connect(db_path)
     cur=conn.cursor()
-    # TODO: add in table for plot
     cur.executescript("""
                         CREATE TABLE IF NOT EXISTS year      (y_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                                                               year INTEGER UNIQUE);
@@ -26,7 +25,7 @@ def create_mdb():
                                                               file_name TEXT UNIQUE NOT NULL,
                                                               title VARCHAR(200) NOT NULL,
                                                               length INTEGER,
-                                                              info VARCHAR(400),
+                                                              plot VARCHAR(400),
                                                               y_id);
                         CREATE TABLE IF NOT EXISTS genre     (g_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                                                               name_genre VARCHAR(30) UNIQUE NOT NULL);
