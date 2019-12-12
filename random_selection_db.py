@@ -1,30 +1,6 @@
 import sqlite3
 import os
     
-def maxlengthfilm():
-    """
-    (none) --> int
-    
-    Asks the user for an input of a maximum length in hours and minutes and returns the amount of minutes. 
-    The return value is then used to select movies from the database that don't exceed this time.
-    """
-    
-    print("\nHow much time do you have?\nPlease type the amount of hours and minutes in the following format:\n\tHOURS:MINUTES(two numbers)\te.g. 2:30, 3:05\n\nor press enter to go on without maximum length setting\n\n")
-    while True:
-        time=input("maximum length : ")
-        if len(time)==0:
-            return None
-        else: 
-            if (len(time)==4 or len(time)==5)and ':' in time:
-                try:
-                    hours=int(time[:-3])
-                    minutes=int(time[-2:])
-                    return minutes+(hours*60)
-                except: 
-                    print("wrong formatting\n")
-            else: print("wrong formatting\n")
-
-
 def select_movies(list_names, max_length):
     """
     (list, int) --> list
