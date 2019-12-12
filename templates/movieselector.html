@@ -19,12 +19,10 @@
 {% block script %}
 <script src="{{ url_for('static', filename="js/main.js")}}"></script>
 <script type="text/javascript">
-    var maxlength = {{ data.maxlength }};
-    var names = {{ data.names }};
-
+ 
     var indexNames=0;
     var name = names[indexNames];
-    document.getElementById("who_picks").innerHTML = name;
+    document.getElementById("who_picks").innerHTML = "<p>name</p>"";
 
     function nextName(){
         if (indexNames < names.length){
@@ -37,9 +35,6 @@
         nextName();
         document.getElementById("who_picks").innerHTML = name;
     }
-    
-
-
     
 </script>
 {% endblock %}

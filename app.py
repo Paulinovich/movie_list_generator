@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session, url_for
 from flask_session.__init__ import Session
 import database as db, random_selection_db as rsdb
 import random
@@ -64,14 +64,16 @@ def criteria():
             # TODO: solve problem when no maxlength is given.
             maxlength=request.form.get("maxlength")
             session["maxlength"]=maxlength
-            return redirect("/movieselector")
+            return redirect(url_for("movieselector"))
 
-    return render_template("criteria.html", names=session["names"], names_set=names_set)
+    return render_template("criteria.html", names=session.get("names"), names_set=names_set)
 
 
 @app.route("/movieselector")
 def movieselector():
-    return render_template("movieselector.html", data=session)
+    names = session.get("names")
+    maxlength = session.get("maxlength", None)
+    return render_template("movieselector.html", names=names, maxlength=maxlength)
 
 if __name__ == "__main__":
     app.run(debug=True)

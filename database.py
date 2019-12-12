@@ -94,7 +94,7 @@ def fill_examles_mdb():
     conn.commit()
     conn.close()
 
-
+# TODO
 def add_movie(file):
     """
     (string) --> none
@@ -105,20 +105,19 @@ def add_movie(file):
     """
 
     # select name from path
-    # stripping input of path
+    # stripping input of path and extension
     name = file[(len(os.path.basename(file))):-4]
 
-    # stripping input of extension
 
     # figure out it's length in Minutes
     # https://stackoverflow.com/questions/3844430/how-to-get-the-duration-of-a-video-in-python
 
 
-    #also checking if movie was deleted? How could that be done without rewriting the whole db?
     #INSERT OR IGNORE INTO
     #conn.commit()
 
 
+# TODO
 def descend_directories(top):
     """
     (string) --> none
@@ -139,6 +138,7 @@ def descend_directories(top):
             if pathname.endswith(movie_extensions):
                 add_movie()
 
+# TODO 
 def fill_info_mdb():
     """
     (none) ---> none
@@ -148,5 +148,5 @@ def fill_info_mdb():
 
     This data is collected with an API to an online database and is saved in the local movie database.
     """
-    # for parse through text and place a \ before all 's
+    # for plot: parse through text and place a \ before all 's
 
