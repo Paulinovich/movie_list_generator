@@ -9,8 +9,9 @@
      we use a form just for now -->  
 
      <form action="{{ url_for('dbsetup') }}" method="post">
-        <input type="text" name="directory" placeholder="Enter the parent directory where you store all your movies.">
-        <button>Submit</button>
+        <label>Enter the parent directory where you store all your movies.</label>
+        <input type="text" name="directory" placeholder="Top directory" autofocus required>
+        <button name="makeDB">Submit</button>
 
         <!--
         on submit: 

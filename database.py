@@ -1,7 +1,7 @@
 import sqlite3
-#import panda as pd
 import os, sys
 from stat import *
+from moviepy.video.io.VideoFileClip import VideoFileClip
 
 
 
@@ -108,18 +108,21 @@ def add_movie(file):
     (string) --> none
 
     saves the names of a file and its length in the local movie database.
-    The function assumes that the files have names that refer to the actual movie titles.
+    The function assumes that the files have names that refer to the actual movie titles with _ or - between words.
     ?? This function can also be used to update the database; it then looks for movies files that have not been added yet.
     """
 
-    # select name from path
-    # stripping input of path and extension
-    name = file[(len(os.path.basename(file))):-4]
+    # stripping input of extension
+    name = file[:-4]
+    # replace all '_' or'-' with whitespaces
+    name = name.replace('_', ' ')
+    name = name.replace('-', ' ')
 
-
+    
     # figure out it's length in Minutes
-    # https://stackoverflow.com/questions/3844430/how-to-get-the-duration-of-a-video-in-python
-
+    clip = VideoFileClip(file)
+    clip.duration
+    
 
     #INSERT OR IGNORE INTO
     #conn.commit()
@@ -142,9 +145,9 @@ def descend_directories(top):
         if S_ISDIR(mode):
             descend_directories(pathname)
         # if item is a regular file: check if it is a film file
-        elif S_ISREG():
+        elif S_ISREG(mode):
             if pathname.endswith(movie_extensions):
-                add_movie()
+                add_movie(f)
 
 # TODO 
 def fill_info_mdb():

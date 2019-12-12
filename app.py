@@ -27,7 +27,9 @@ def dbsetup():
 
     elif request.method =="POST":
         # create db and drop if exists to fill new. 
+        topDir=request.form.get("directory")
         db.create_mdb()
+        db.descend_directories(topDir)
 
         # 1. make the data base (in the meanwhile alert user to be patient), 
         # 2. create a popup if all went well to inform user
@@ -79,7 +81,8 @@ def criteria():
 def movieselector():
     names = session.get("names")
     maxlength = session.get("maxlength", None)
-    return render_template("movieselector.html", names=names, maxlength=maxlength)
+    rsdb.select_movies(names, maxlength)
+    return render_template("movieselector.html", names=names)
 
 if __name__ == "__main__":
     app.run(debug=True)
