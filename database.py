@@ -19,23 +19,31 @@ def create_mdb():
     conn=sqlite3.connect(db_path)
     cur=conn.cursor()
     cur.executescript("""
-                        CREATE TABLE IF NOT EXISTS year      (y_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                        DROP TABLE IF EXISTS directed_by;
+                        DROP TABLE IF EXISTS produced_in;
+                        DROP TABLE IF EXISTS defined_as;
+                        DROP TABLE IF EXISTS director;
+                        DROP TABLE IF EXISTS country;
+                        DROP TABLE IF EXISTS genre;
+                        DROP TABLE IF EXISTS movie;
+                        DROP TABLE IF EXISTS year;
+                        CREATE TABLE year      (y_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                                                               year INTEGER UNIQUE);
-                        CREATE TABLE IF NOT EXISTS movie     (m_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                        CREATE TABLE movie     (m_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                                                               file_name TEXT UNIQUE NOT NULL,
                                                               title VARCHAR(200) NOT NULL,
                                                               length INTEGER,
                                                               plot VARCHAR(400),
                                                               y_id);
-                        CREATE TABLE IF NOT EXISTS genre     (g_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                        CREATE TABLE genre     (g_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                                                               name_genre VARCHAR(30) UNIQUE NOT NULL);
-                        CREATE TABLE IF NOT EXISTS country   (c_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                        CREATE TABLE country   (c_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                                                               name_country VARCHAR(56) UNIQUE NOT NULL);
-                        CREATE TABLE IF NOT EXISTS director  (d_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                        CREATE TABLE director  (d_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                                                               name_director VARCHAR(30) UNIQUE NOT NULL);
-                        CREATE TABLE IF NOT EXISTS defined_as (m_id INTEGER, g_id INTEGER, PRIMARY KEY(m_id, g_id));
-                        CREATE TABLE IF NOT EXISTS produced_in (m_id INTEGER, c_id INTEGER, PRIMARY KEY(m_id, c_id));
-                        CREATE TABLE IF NOT EXISTS directed_by (m_id INTEGER, d_id INTEGER, PRIMARY KEY(m_id, d_id));
+                        CREATE TABLE defined_as (m_id INTEGER, g_id INTEGER, PRIMARY KEY(m_id, g_id));
+                        CREATE TABLE produced_in (m_id INTEGER, c_id INTEGER, PRIMARY KEY(m_id, c_id));
+                        CREATE TABLE directed_by (m_id INTEGER, d_id INTEGER, PRIMARY KEY(m_id, d_id));
                         """)
     conn.commit()
     conn.close()

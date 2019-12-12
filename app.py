@@ -26,6 +26,9 @@ def dbsetup():
         return render_template("dbsetup.html")
 
     elif request.method =="POST":
+        # create db and drop if exists to fill new. 
+        db.create_mdb()
+
         # 1. make the data base (in the meanwhile alert user to be patient), 
         # 2. create a popup if all went well to inform user
         # 3. return to index.html
