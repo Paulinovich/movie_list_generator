@@ -62,8 +62,11 @@ def criteria():
         elif "submit_all" in request.form:
             # TODO: find out what datatype this returns
             # TODO: solve problem when no maxlength is given.
-            maxlength=request.form.get("maxlength")
+            maxlength = int(request.form.get("minutes"))+(int(request.form.get("hours"))*60)
+            print(request.form.get("minutes"), "\n")
+            print(request.form.get("hours"), "\n")
             session["maxlength"]=maxlength
+            print(maxlength)
             return redirect(url_for("movieselector"))
 
     return render_template("criteria.html", names=session.get("names"), names_set=names_set)

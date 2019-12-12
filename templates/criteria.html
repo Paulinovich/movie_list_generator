@@ -46,17 +46,16 @@
     <!-- ask for maximum length, hide everything else -->
     {% if names_set %}
         <form action="{{ url_for('criteria') }}" method="POST">
-            <label class="ask">How much time do you have?</label>
+            <label class="ask">How much time do you have?</label><br>
             <label>
                     <!--TODO: find better input styling or other input solution, this doesn't work-->
-                    Maximum length: <input type="time" name="maxlength" step="5000">
+                    Maximum length: 
+                    <input type="number" name="hours" min="0" max = "12" step="1">  :  <input type="number" name="minutes" min="0" max = "55" step="5">     (hours : minutes)
                     <br>
                     <small>Or leave empty if you're flexible.</small>
                     <br><br>
                     <button name="submit_all">Create your movie list</button>
             </label>
-
-                
         </form>
 
     {% endif %}
