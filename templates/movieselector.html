@@ -10,7 +10,7 @@
         3: when accepted, the clicked movie is hidden and a new name pops up
         4: until only one movie remains, popcorn falling from the sky in the browser
     -->
-    <div id="who_picks"></div>
+    <div><p id="who_picks"></p></div>
 
     <button onclick="updateName()">click</button>
 
@@ -21,8 +21,11 @@
 <script type="text/javascript">
  
     var indexNames=0;
+    var names = {{names|tojson}}
     var name = names[indexNames];
-    document.getElementById("who_picks").innerHTML = "<p>name</p>";
+    console.log(names)
+    console.log(name)
+    document.getElementById("who_picks").innerHTML = name;
 
     function nextName(){
         if (indexNames < names.length){
