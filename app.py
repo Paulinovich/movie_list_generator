@@ -43,7 +43,7 @@ def criteria():
             if name != '':
                     # if the variable names already exists inside the session
                     if session["names"]:
-                        session["names"].append(name)
+                        session["names"].append(name.rstrip('\n'))
                     # create a new variable names in the session
                     else:
                         names=[name]
