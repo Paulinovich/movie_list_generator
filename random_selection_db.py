@@ -16,22 +16,28 @@ def select_movies(list_names, max_length):
     
     size=len(list_names)+1
     list_movies=[]
-    try:
+    length_db = cur.execute('SELECT COUNT(*) FROM movie')
         #when no maximum length is given
-        if max_length==None:
+    if max_length==None:
+        if size <= length_db:
             cur.execute('SELECT m_id FROM movie ORDER BY RANDOM() LIMIT(?)',(size, ))
             for mov in cur:
                 list_movies.append(mov)
-        #selecting based on the maximum length
         else:
-            cur.execute('SELECT m_id FROM movie WHERE length<=? ORDER BY RANDOM() LIMIT(?)',(max_length, size ))
+            print("There are not enough movies found.\nPlease cluster viewers in groups")
+            conn.close()
+            exit()
+    #selecting based on the maximum length
+    else:
+        try: 
+            cur.execute('SELECT m_id FROM movie WHERE length<=? ORDER BY RANDOM() LIMIT(?)',(max_length, size))
             for mov in cur:
                 list_movies.append(mov)         
-        conn.close() 
-    except:
-        print("Something went wrong\nSorry! ")
-        conn.close()
-        exit()
+        except:
+            print("There are not enough movies found with your given criteria.\nPlease cluster viewers in groups or give a higher maximum duration.")
+            conn.close()
+            exit()
+    conn.close() 
     return list_movies
     
 

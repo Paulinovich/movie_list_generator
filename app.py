@@ -83,7 +83,7 @@ def criteria():
 @app.route("/movieselector")
 def movieselector():
     names = session.get("names")
-    maxlength = session.get("maxlength", None)
+    maxlength = session.get("maxlength")
     rsdb.select_movies(names, maxlength)
     return render_template("movieselector.html", names=names)
 
