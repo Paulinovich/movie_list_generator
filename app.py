@@ -65,15 +65,18 @@ def criteria():
         
         # submit all criteria: send all criteria to movieselector page to make movie list
         elif "submit_all" in request.form:
-            # TODO: find out what datatype this returns
-            # TODO: solve problem when no maxlength is given.
-            maxlength = int(request.form.get("minutes"))+(int(request.form.get("hours"))*60)
-            print(request.form.get("minutes"), "\n")
-            print(request.form.get("hours"), "\n")
-            session["maxlength"]=maxlength
-            print(maxlength)
+            if len(request.form.get("hours"))>0:
+                if len(request.form.get("minutes"))>0:
+                    maxlength = int(request.form.get("minutes"))+(int(request.form.get("hours"))*60)    
+                else:
+                    maxlength = int(request.form.get("hours"))*60
+            else: 
+                if len(request.form.get("minutes"))>0:
+                    maxlength = int(request.form.get("minutes"))
+                else: 
+                    maxlength = None
+            session["maxlength"] = maxlength
             return redirect(url_for("movieselector"))
-
     return render_template("criteria.html", names=session.get("names"), names_set=names_set)
 
 

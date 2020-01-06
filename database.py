@@ -3,8 +3,6 @@ import os, sys
 from stat import *
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
-
-
 def create_mdb():
     """
     (none) --> none
