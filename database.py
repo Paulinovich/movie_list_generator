@@ -148,14 +148,30 @@ def descend_directories(top):
                 add_movie(f)
 
 # TODO 
-def fill_info_mdb():
+def fill_info_mdb(fileName):
     """
-    (none) ---> none
+    (string) ---> none
 
-    Checks the correctness of the titles from the movies in the database and searches additional information:
-    year, countries, director, genre and plot.
+    Checks the correctness of the title from a movie, searches additional information 
+    (year, countries, directors, genres, length, image link and plot) and stores these in the DB.
 
-    This data is collected with an API to an online database and is saved in the local movie database.
+    This data is collected with an API to an online database of The Movie DB and is saved in the local movie database.
     """
-    # for plot: parse through text and place a \ before all 's
+
+    # inspiration and help : https://www.freecodecamp.org/news/scrape-the-web-for-top-rated-movies-on-tv/
+    # 1) with The Movie DB API we look for matches of with the cleaned movie title
+    # 2) check if we have a good match between these results:
+    #   - we check with fuzzywuzzy if the matching ratio is above 90% to allow some typos but to be strict
+    #   - we check if the length of the movie fits the length of our file but give it a bit buffer (600 seconds?)
+    # 3) if good (and only first good one): get needed information from the API:
+    #   - correct title
+    #   - year
+    #   - plot: parse through text and place a \ before all 's!
+    #   - countries
+    #   - directors
+    #   - genres
+    #   - length
+    #   - image link
+    # 4) add all information to the DB
+
 
