@@ -1,5 +1,6 @@
 import sqlite3
 import os, sys
+import math
 from stat import *
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
@@ -107,26 +108,29 @@ def add_movie(file):
 
     saves the names of a file and its length in the local movie database.
     The function assumes that the files have names that refer to the actual movie titles with _ or - between words.
-    ?? This function can also be used to update the database; it then looks for movies files that have not been added yet.
     """
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, "movie_db.sqlite") 
 
+    conn=sqlite3.connect(db_path)
+    cur=conn.cursor()
+
+    # NAME 
     # stripping input of extension
     name = file[:-4]
     # replace all '_' or'-' with whitespaces
     name = name.replace('_', ' ')
     name = name.replace('-', ' ')
 
-    
+    # LENGTH: 
     # figure out it's length in Minutes
+    ## TODO: check if ffpobe option which would be faster (https://stackoverflow.com/questions/3844430/how-to-get-the-duration-of-a-video-in-python)
     clip = VideoFileClip(file)
-    clip.duration
+    # clip.duration is in seconds: converting to minutes and rounding up
+    duration = math.ceil((clip.duration)/60)
+
+    # The Movie Database API https://developers.themoviedb.org/3/getting-started/introduction
     
-
-    #INSERT OR IGNORE INTO
-    #conn.commit()
-
-
-# TODO
 def descend_directories(top):
     """
     (string) --> none
@@ -135,17 +139,20 @@ def descend_directories(top):
     """
     movie_extensions = (".AVI", ".avi", ".FLV", ".flv", ".WMV", ".wmv", ".MOV", ".mov", ".MP4", ".mp4")
 
-    for f in os.listdir(top):
-        # does this automatically add the \ or / to the path?
-        pathname = os.path.join(top, f)
-        mode = os.stat(pathname)[ST_MODE]
-        # if item is directory, recurse into it
-        if S_ISDIR(mode):
-            descend_directories(pathname)
-        # if item is a regular file: check if it is a film file
-        elif S_ISREG(mode):
-            if pathname.endswith(movie_extensions):
-                add_movie(f)
+    try:
+        for f in os.listdir(top):
+            pathname = os.path.join(top, f)
+            mode = os.stat(pathname)[ST_MODE]
+            # if item is directory, recurse into it
+            if S_ISDIR(mode):
+                descend_directories(pathname)
+            # if item is a regular file: check if it is a film file
+            elif S_ISREG(mode):
+                if pathname.endswith(movie_extensions):
+                    add_movie(pathname)
+    except: 
+        print("folder is empty")
+
 
 # TODO 
 def fill_info_mdb():
