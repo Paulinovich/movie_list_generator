@@ -84,9 +84,8 @@ def criteria():
 def movieselector():
     names = session.get("names")
     maxlength = session.get("maxlength")
-    list_movies = rsdb.select_movies(names, maxlength)
-    
-    return render_template("movieselector.html", names=names, list_movies=list_movies)
+    rsdb.select_movies(names, maxlength)
+    return render_template("movieselector.html", names=names)
 
 if __name__ == "__main__":
     app.run(debug=True)
