@@ -104,6 +104,7 @@ def movie_info_selection(list_movies):
         information["directors"] = directors.lstrip(", ")
 
         all_information.append(information)
+    conn.close()
     return all_information
 
 
@@ -120,43 +121,3 @@ def normal_string(strings):
         try: string.replace("''", "'")
     
     return strings[0], strings[1], strings[2]
-        
-        
-
-
-       
-    #     'genres=''
-    #     for genre in rows:
-    #         #first name without comma
-    #         if len(genres)==0:
-    #             genres+=genre[0]
-    #         else:
-    #             genres+=", "+genre[0]
-            
-    #     cur.execute('SELECT name_director FROM director WHERE d_id IN(SELECT d_id FROM directed_by WHERE m_id==?)',(movie[0],))
-    #     rows=cur.fetchall() 
-    #     directors=''
-    #     for director in rows:
-    #         if len(directors)==0:
-    #             directors+=director[0]
-    #         else:
-    #             directors+=", "+director[0]
-            
-    #     cur.execute('SELECT name_country FROM country WHERE c_id IN(SELECT c_id FROM produced_in WHERE m_id==?)',(movie[0],))
-    #     rows=cur.fetchall()
-    #     countries=''
-    #     for country in rows:
-    #         if len(countries)==0:
-    #             countries+=country[0]
-    #         else:
-    #             countries+=", "+country[0]
-        
-    #     print("--> Proposal {0}:\n\n\t{1}\n\n{2}\n\n{3}\n\ndirector(s): {4}\n\n{5}\t{6}\n\n".format(count, title[0].upper(), info[0], genres, directors, countries, year[0]))
-    #     count+=1
-
-    # conn.close()'
-    
-        
-# SELECT * FROM table WHERE id IN (SELECT id FROM table ORDER BY RANDOM() LIMIT x)
-    
-
