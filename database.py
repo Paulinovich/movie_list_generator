@@ -62,7 +62,7 @@ def add_movie(file, duration):
 
     This data is collected with an API to an online database of The Movie DB and is saved in the local movie database.
     """
-    information = {"original_title" : None, "title" : None, "year" : None, "countries" : [], "directors" : [], "genres" : [], "duration": None, "image_link" : None, "plot" : None}
+    information = {"countries" : [], "directors" : [], "genres" : []}
     match = False
 
     name = file[:-4]

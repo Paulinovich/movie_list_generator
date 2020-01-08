@@ -10,7 +10,11 @@
         3: when accepted, the clicked movie is hidden and a new name pops up
         4: until only one movie remains, popcorn falling from the sky in the browser
     -->
-    <div><p id="who_picks"></p></div>
+    <div id="picking"><p id="who_picks"></p></div>
+
+    <div id="presentation_movies"></div>
+
+
 
     <button onclick="updateName()">click</button>
 
@@ -20,7 +24,7 @@
 {% block script %}
 <script src="{{ url_for('static', filename="js/main.js")}}"></script>
 <script type="text/javascript">
- 
+    
     var indexNames=0;
     var names = {{names|tojson}};
     var name = names[indexNames];

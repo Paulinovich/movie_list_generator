@@ -52,51 +52,109 @@ def movie_info_selection(list_movies):
 
     conn=sqlite3.connect(db_path)
     cur=conn.cursor()
-    
-    count=1
-    for movie in list_movies:
-        
-        cur.execute('SELECT title FROM movie WHERE m_id==?',(movie[0],))
-        title=cur.fetchone()
-        
-        cur.execute('SELECT info FROM movie WHERE m_id==?',(movie[0],))
-        info=cur.fetchone()
-        
-        cur.execute('SELECT year FROM year WHERE y_id IN(SELECT y_id FROM movie WHERE m_id==?)',(movie[0],))
-        year=cur.fetchone()
-        
-        cur.execute('SELECT name_genre FROM genre WHERE g_id IN(SELECT g_id FROM defined_as WHERE m_id==?)',(movie[0],))
-        rows=cur.fetchall()
-        genres=''
-        for genre in rows:
-            #first name without comma
-            if len(genres)==0:
-                genres+=genre[0]
-            else:
-                genres+=", "+genre[0]
-            
-        cur.execute('SELECT name_director FROM director WHERE d_id IN(SELECT d_id FROM directed_by WHERE m_id==?)',(movie[0],))
-        rows=cur.fetchall() 
-        directors=''
-        for director in rows:
-            if len(directors)==0:
-                directors+=director[0]
-            else:
-                directors+=", "+director[0]
-            
-        cur.execute('SELECT name_country FROM country WHERE c_id IN(SELECT c_id FROM produced_in WHERE m_id==?)',(movie[0],))
-        rows=cur.fetchall()
-        countries=''
-        for country in rows:
-            if len(countries)==0:
-                countries+=country[0]
-            else:
-                countries+=", "+country[0]
-        
-        print("--> Proposal {0}:\n\n\t{1}\n\n{2}\n\n{3}\n\ndirector(s): {4}\n\n{5}\t{6}\n\n".format(count, title[0].upper(), info[0], genres, directors, countries, year[0]))
-        count+=1
+    # we store information for each movie in a dictionary and store these in a list
+    all_information = []
 
-    conn.close()
+    for movie in list_movies:
+        information = {}
+
+        cur.execute('SELECT title, original_title, duration, image_link, plot, y_id FROM movie WHERE m_id={}'.format(movie))
+        (title, original_title, duration, image_link, plot, y_id) = cur.fetchone()
+        # changing double single-quotation marks back to one.
+        title, original_title, plot = normal_string([title, original_title, plot])
+        information["title"] = title
+        information["original_title"] = original_title
+        information["duration"] = duration
+        information["image_link"] = image_link
+        information["plot"] = plot
+
+        cur.execute('SELECT year FROM year WHERE m_id={}'.format(y_id))
+        information["year"] = cur.fetchone()[0]
+
+        # getting genre info
+        cur.execute('SELECT g_id FROM defined_as WHERE m_id={}'.format(movie))
+        g_id_tuples = cur.fetchall()
+        # saving genres in one string
+        genres = ''
+        for g_id_tuple in g_id_tuples:
+            g_id = g_id_tuple[0]
+            cur.execute('SELECT name_genre FROM genre WHERE g_id={}'.format(g_id))
+            genres = genres + ", "+cur.fetchone()[0]
+        # removes comma and space at beginning of string
+        information["genres"] = genres.lstrip(", ")
+        
+        # getting countries info and saving in one string
+        cur.execute('SELECT c_id FROM produced_in WHERE m_id={}'.format(movie))
+        c_id_tuples = cur.fetchall()
+        countries = ''
+        for c_id_tuple in c_id_tuples:
+            c_id = c_id_tuple[0]
+            cur.execute('SELECT abbreviation_country FROM country WHERE c_id={}'.format(c_id))
+            countries = countries + ", "+cur.fetchone()[0]
+        information["countries"] = countries.lstrip(", ")
+
+        # getting director info and saving in one string
+        cur.execute('SELECT d_id FROM directed_by WHERE m_id={}'.format(movie))
+        d_id_tuples = cur.fetchall()
+        directors = ''
+        for d_id_tuple in d_id_tuples:
+            d_id = d_id_tuple[0]
+            cur.execute('SELECT name_director FROM director WHERE d_id={}'.format(d_id))
+            directors = directors + ", "+cur.fetchone()[0]
+        information["directors"] = directors.lstrip(", ")
+
+        all_information.append(information)
+    return all_information
+
+
+
+
+
+def normal_string(strings):
+    """
+    (list) --> string
+
+    Changes every double single-quote (') character back to the original one.
+    """
+    for string in strings:
+        try: string.replace("''", "'")
+    
+    return strings[0], strings[1], strings[2]
+        
+        
+
+
+       
+    #     'genres=''
+    #     for genre in rows:
+    #         #first name without comma
+    #         if len(genres)==0:
+    #             genres+=genre[0]
+    #         else:
+    #             genres+=", "+genre[0]
+            
+    #     cur.execute('SELECT name_director FROM director WHERE d_id IN(SELECT d_id FROM directed_by WHERE m_id==?)',(movie[0],))
+    #     rows=cur.fetchall() 
+    #     directors=''
+    #     for director in rows:
+    #         if len(directors)==0:
+    #             directors+=director[0]
+    #         else:
+    #             directors+=", "+director[0]
+            
+    #     cur.execute('SELECT name_country FROM country WHERE c_id IN(SELECT c_id FROM produced_in WHERE m_id==?)',(movie[0],))
+    #     rows=cur.fetchall()
+    #     countries=''
+    #     for country in rows:
+    #         if len(countries)==0:
+    #             countries+=country[0]
+    #         else:
+    #             countries+=", "+country[0]
+        
+    #     print("--> Proposal {0}:\n\n\t{1}\n\n{2}\n\n{3}\n\ndirector(s): {4}\n\n{5}\t{6}\n\n".format(count, title[0].upper(), info[0], genres, directors, countries, year[0]))
+    #     count+=1
+
+    # conn.close()'
     
         
 # SELECT * FROM table WHERE id IN (SELECT id FROM table ORDER BY RANDOM() LIMIT x)

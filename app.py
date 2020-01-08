@@ -15,7 +15,7 @@ sess.init_app(app)
 
 @app.route("/")
 def index():
-    #reset all names if user goes back to index: decided to use emty list instead of pop due to the many errorhandlings with the last
+    #reset all names if user goes back to index: decided to use empty list instead of pop due to the many errorhandlings with the last
     session["names"]=[]
     return render_template("index.html")
 
@@ -84,7 +84,11 @@ def criteria():
 def movieselector():
     names = session.get("names")
     maxlength = session.get("maxlength")
-    rsdb.select_movies(names, maxlength)
+    list_movies = rsdb.select_movies(names, maxlength)
+    information = rsdb.movie_info_selection(list_movies)
+    # TODO: change list of dictionaries to a json file for javascript
+    # https://stackoverflow.com/questions/10073564/how-can-i-convert-python-dictionary-to-javascript-hash-table
+    # https://stackoverflow.com/questions/21525328/python-converting-a-list-of-dictionaries-to-json
     return render_template("movieselector.html", names=names)
 
 if __name__ == "__main__":
