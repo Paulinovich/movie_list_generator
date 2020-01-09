@@ -58,13 +58,12 @@ def movie_info_selection(list_movies):
     for movie in list_movies:
         information = {}
 
-        cur.execute('SELECT title, original_title, duration, image_link, plot, y_id FROM movie WHERE m_id={}'.format(movie))
+        cur.execute('SELECT title, original_title, image_link, plot, y_id FROM movie WHERE m_id={}'.format(movie))
         (title, original_title, duration, image_link, plot, y_id) = cur.fetchone()
         # changing double single-quotation marks back to one.
         title, original_title, plot = normal_string([title, original_title, plot])
         information["title"] = title
         information["original_title"] = original_title
-        information["duration"] = duration
         information["image_link"] = image_link
         information["plot"] = plot
 
@@ -118,6 +117,5 @@ def normal_string(strings):
     Changes every double single-quote (') character back to the original one.
     """
     for string in strings:
-        try: string.replace("''", "'")
-    
+        string.replace("''", "'")
     return strings[0], strings[1], strings[2]

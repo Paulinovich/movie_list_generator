@@ -162,8 +162,7 @@ def sqlite_string(strings):
     Doubles every single-quote (') character for safe use as a string value with SQL.
     """
     for string in strings:
-        try: string.replace("'", "''")
-    
+        string.replace("'", "''")
     return strings[0], strings[1], strings[2]
 
 

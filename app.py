@@ -89,7 +89,9 @@ def movieselector():
     # TODO: change list of dictionaries to a json file for javascript
     # https://stackoverflow.com/questions/10073564/how-can-i-convert-python-dictionary-to-javascript-hash-table
     # https://stackoverflow.com/questions/21525328/python-converting-a-list-of-dictionaries-to-json
-    return render_template("movieselector.html", names=names)
+    # https://stackoverflow.com/questions/42499535/passing-a-json-object-from-flask-to-javascript
+
+    return render_template("movieselector.html", names=names, information=information)
 
 if __name__ == "__main__":
     app.run(debug=True)

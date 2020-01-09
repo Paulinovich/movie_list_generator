@@ -1,0 +1,36 @@
+.movie_info{
+    position: relative;
+    display: inline-block;
+    cursor:pointer;
+}
+
+.popup{
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+.popup .show{
+    visibility: visible;
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}
+
+@-webkit-keyframes fadeIn{
+    from {opacity: 0;}
+    to {opacity:1;}
+}
+
+@keyframes fadeIn{
+    from {opacity: 0;}
+    to {opacity:1;}
+}
+
+.movie_info .eliminated{
+    display: none;
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}

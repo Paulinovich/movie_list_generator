@@ -12,7 +12,23 @@
     -->
     <div id="picking"><p id="who_picks"></p></div>
 
-    <div id="presentation_movies"></div>
+    <div id="presentation_movies">
+        {% for movie in movie_information %}
+            <!-- part of unique id for every movie is made by first 4 characters of name and the year -->
+            <div class = "movie_info" id="{{ movie['title'][:5]+movie['year']+'_info' }}" onclick="popup({{ movie['title'][:5]+movie['year']+'_popup' }})">
+                <h2>{{ movie["original_title"]}}</h2>
+                <p>{{ movie["title"]}} ({{movie["genres"]}})</p><br>
+                <p>by {{ movie["directors"]}} ({{ movie["year"]}} - {{movie["countries"]}})</p>
+                <img src="{{ movie['image_link']}}">
+                <p>{{ movie["plot"]}}</p>
+            </div>
+            <div class="popup" id="{{ movie['title'][:5]+movie['year']+'_popup' }}">
+                <p>Eliminate the movie {{ movie["original_title"]}}?</p>
+                <button onclick="eliminate({{ movie['title'][:5]+movie['year']+'_info' }})">Sure</button>
+                <button onclick="popup({{ movie['title'][:5]+movie['year']+'_popup' }})">Wait, go back!</button>
+            </div>
+        {% endfor %}
+    </div>
 
 
 
@@ -22,16 +38,16 @@
 {% endblock %}
 
 {% block script %}
-<script src="{{ url_for('static', filename="js/main.js")}}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 <script type="text/javascript">
-    
+// writing and updating name of choosing person
     var indexNames=0;
     var names = {{names|tojson}};
     var name = names[indexNames];
     document.getElementById("who_picks").innerHTML = name;
 
     function nextName(){
-        if (indexNames < names.length){
+        if (indexNames < names.length-1){
             indexNames++;
             name = names[indexNames];
         }
@@ -42,5 +58,18 @@
         document.getElementById("who_picks").innerHTML = name;
     }
     
+// movie information display and hiding
+    // converting 'information' into json representation with proper escaping of special characters for html
+    var movie_information = JSON.parse('{{information | tojson | safe}}');
+
+    function popup(id){
+        var el = document.getElementById("\""+id+"\"");
+        el.classList.toggle("show");
+    }
+
+    function eliminate(id){
+        var el = document.getElementById("\""+id+"\"");
+        el.classList.add("eliminated");
+    }
 </script>
 {% endblock %}
