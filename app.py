@@ -86,11 +86,6 @@ def movieselector():
     maxlength = session.get("maxlength")
     list_movies = rsdb.select_movies(names, maxlength)
     information = rsdb.movie_info_selection(list_movies)
-    # TODO: change list of dictionaries to a json file for javascript
-    # https://stackoverflow.com/questions/10073564/how-can-i-convert-python-dictionary-to-javascript-hash-table
-    # https://stackoverflow.com/questions/21525328/python-converting-a-list-of-dictionaries-to-json
-    # https://stackoverflow.com/questions/42499535/passing-a-json-object-from-flask-to-javascript
-
     return render_template("movieselector.html", names=names, information=information)
 
 if __name__ == "__main__":

@@ -16,7 +16,8 @@ def select_movies(list_names, max_length):
     
     size=len(list_names)+1
     list_movies=[]
-    length_db = cur.execute('SELECT COUNT(*) FROM movie')
+    cur.execute('SELECT COUNT(*) FROM movie')
+    length_db = cur.fetchone()[0]
         #when no maximum length is given
     if max_length==None:
         if size <= length_db:
@@ -43,9 +44,9 @@ def select_movies(list_names, max_length):
 
 def movie_info_selection(list_movies):
     """
-    (list of tuples) --> none
+    (list) --> list of dictionaries
     
-    Prints out the interesting information about the selected movies from the database.
+    Returns the needed information about the selected movies from the database.
     """
     base_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(base_dir, "movie_db.sqlite") 
