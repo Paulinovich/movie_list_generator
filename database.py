@@ -126,29 +126,29 @@ def save_in_db(match, info):
 
     # TODO: get out all repetitions in the code
     if match == True:
-        cur.execute("INSERT OR IGNORE INTO year (year) VALUES({});".format(info["year"]))
-        cur.execute("SELECT y_id FROM year WHERE year={};".format(info["year"]))
+        cur.execute("INSERT OR IGNORE INTO year (year) VALUES(%i)",(info["year"], ))
+        cur.execute("SELECT y_id FROM year WHERE year=%i",(info["year"], ))
         y_id = cur.fetchone()[0]
         # clean the strings to work with sql
         plot_cleaned, title_cleaned, or_title_cleaned = sqlite_string([info["plot"], info["title"], info["original_title"]])
-        cur.execute("INSERT OR IGNORE INTO movie (original_title, title, duration, image_link, plot, y_id) VALUES({})".format(or_title_cleaned, title_cleaned, info["duration"], info["image_link"], plot_cleaned, y_id))
-        cur.execute("SELECT g_id FROM movie WHERE title={};".format(title_cleaned))
+        cur.execute("INSERT OR IGNORE INTO movie (original_title, title, duration, image_link, plot, y_id) VALUES(%s, %s, %i, %s, %s, %i)",(or_title_cleaned, title_cleaned, info["duration"], info["image_link"], plot_cleaned, y_id))
+        cur.execute("SELECT g_id FROM movie WHERE title=%s",(title_cleaned, ))
         m_id = cur.fetchone()[0]
         for genre in info["genres"]:
-            cur.execute("INSERT OR IGNORE INTO genre (name_genre) VALUES({});".format(genre))
-            cur.execute("SELECT g_id FROM genre WHERE name_genre={};".format(genre))
+            cur.execute("INSERT OR IGNORE INTO genre (name_genre) VALUES(%s)",(genre, ))
+            cur.execute("SELECT g_id FROM genre WHERE name_genre=%s",(genre, ))
             g_id = cur.fetchone()[0]
-            cur.execute("INSERT INTO defined_as VALUES({})".format(m_id, g_id))
+            cur.execute("INSERT INTO defined_as VALUES(%i, %i)",(m_id, g_id))
         for country in info["countries"]:
-            cur.execute("INSERT OR IGNORE INTO country (abbreviation_country) VALUES({});".format(country))
-            cur.execute("SELECT g_id FROM genre WHERE name_genre={};".format(country))
+            cur.execute("INSERT OR IGNORE INTO country (abbreviation_country) VALUES(%s)",(country, ))
+            cur.execute("SELECT g_id FROM genre WHERE name_genre=%s",(country, ))
             c_id = cur.fetchone()[0]
-            cur.execute("INSERT INTO produced_in VALUES({})".format(m_id, c_id))
+            cur.execute("INSERT INTO produced_in VALUES(%i, %i)",(m_id, c_id))
         for director in info["directors"]:
-            cur.execute("INSERT OR IGNORE INTO director (name_director) VALUES({});".format(director))
-            cur.execute("SELECT g_id FROM director WHERE name_director={};".format(director))
+            cur.execute("INSERT OR IGNORE INTO director (name_director) VALUES(%s)",(director, ))
+            cur.execute("SELECT g_id FROM director WHERE name_director=%s",(director, ))
             d_id = cur.fetchone()[0]
-            cur.execute("INSERT INTO directed_by VALUES({})".format(m_id, d_id))
+            cur.execute("INSERT INTO directed_by VALUES(%i, %i)",(m_id, d_id))
     else: 
         print("Movie is not found.")
     conn.commit()

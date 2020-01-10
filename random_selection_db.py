@@ -21,7 +21,7 @@ def select_movies(list_names, max_length):
         #when no maximum length is given
     if max_length==None:
         if size <= length_db:
-            cur.execute('SELECT m_id FROM movie ORDER BY RANDOM() LIMIT(?)',(size, ))
+            cur.execute('SELECT m_id FROM movie ORDER BY RANDOM() LIMIT({})'.format(size))
             for mov in cur:
                 list_movies.append(mov)
         else:
@@ -31,7 +31,7 @@ def select_movies(list_names, max_length):
     #selecting based on the maximum length
     else:
         try: 
-            cur.execute('SELECT m_id FROM movie WHERE length<=? ORDER BY RANDOM() LIMIT(?)',(max_length, size))
+            cur.execute('SELECT m_id FROM movie WHERE length<=%i ORDER BY RANDOM() LIMIT(%i)',(max_length, size))
             for mov in cur:
                 list_movies.append(mov)         
         except:
@@ -41,7 +41,6 @@ def select_movies(list_names, max_length):
     conn.close() 
     return list_movies
     
-
 def movie_info_selection(list_movies):
     """
     (list) --> list of dictionaries
@@ -59,7 +58,7 @@ def movie_info_selection(list_movies):
     for movie in list_movies:
         information = {}
 
-        cur.execute('SELECT title, original_title, image_link, plot, y_id FROM movie WHERE m_id={}'.format(movie))
+        cur.execute('SELECT title, original_title, image_link, plot, y_id FROM movie WHERE m_id=%i',(movie, ))
         (title, original_title, duration, image_link, plot, y_id) = cur.fetchone()
         # changing double single-quotation marks back to one.
         title, original_title, plot = normal_string([title, original_title, plot])
@@ -68,38 +67,38 @@ def movie_info_selection(list_movies):
         information["image_link"] = image_link
         information["plot"] = plot
 
-        cur.execute('SELECT year FROM year WHERE m_id={}'.format(y_id))
+        cur.execute('SELECT year FROM year WHERE m_id=%i',(y_id, ))
         information["year"] = cur.fetchone()[0]
 
         # getting genre info
-        cur.execute('SELECT g_id FROM defined_as WHERE m_id={}'.format(movie))
+        cur.execute('SELECT g_id FROM defined_as WHERE m_id=%i',(movie, ))
         g_id_tuples = cur.fetchall()
         # saving genres in one string
         genres = ''
         for g_id_tuple in g_id_tuples:
             g_id = g_id_tuple[0]
-            cur.execute('SELECT name_genre FROM genre WHERE g_id={}'.format(g_id))
+            cur.execute('SELECT name_genre FROM genre WHERE g_id=%i',(g_id, ))
             genres = genres + ", "+cur.fetchone()[0]
         # removes comma and space at beginning of string
         information["genres"] = genres.lstrip(", ")
         
         # getting countries info and saving in one string
-        cur.execute('SELECT c_id FROM produced_in WHERE m_id={}'.format(movie))
+        cur.execute('SELECT c_id FROM produced_in WHERE m_id=%i',(movie, ))
         c_id_tuples = cur.fetchall()
         countries = ''
         for c_id_tuple in c_id_tuples:
             c_id = c_id_tuple[0]
-            cur.execute('SELECT abbreviation_country FROM country WHERE c_id={}'.format(c_id))
+            cur.execute('SELECT abbreviation_country FROM country WHERE c_id=%i',(c_id, ))
             countries = countries + ", "+cur.fetchone()[0]
         information["countries"] = countries.lstrip(", ")
 
         # getting director info and saving in one string
-        cur.execute('SELECT d_id FROM directed_by WHERE m_id={}'.format(movie))
+        cur.execute('SELECT d_id FROM directed_by WHERE m_id=%i',(movie, ))
         d_id_tuples = cur.fetchall()
         directors = ''
         for d_id_tuple in d_id_tuples:
             d_id = d_id_tuple[0]
-            cur.execute('SELECT name_director FROM director WHERE d_id={}'.format(d_id))
+            cur.execute('SELECT name_director FROM director WHERE d_id=%i',(d_id, ))
             directors = directors + ", "+cur.fetchone()[0]
         information["directors"] = directors.lstrip(", ")
 
