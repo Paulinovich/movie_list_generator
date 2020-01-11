@@ -52,6 +52,30 @@ def create_mdb():
     conn.commit()
     conn.close()
 
+def descend_directories(top):
+    """
+    (string) --> None
+
+    recursively descend the given directory tree and calling the add_movie function for each film file.
+    """
+    movie_extensions = (".AVI", ".avi", ".FLV", ".flv", ".WMV", ".wmv", ".MOV", ".mov", ".MP4", ".mp4")
+
+    for item in os.listdir(top):
+        # does this automatically add the \ or / to the path?
+        pathname = os.path.join(top, item)
+        mode = os.stat(pathname)[ST_MODE]
+        # if item is directory, recurse into it
+        if S_ISDIR(mode):
+            descend_directories(pathname)
+        # if item is a regular file: check if it is a film file
+        elif S_ISREG(mode):
+            if pathname.endswith(movie_extensions):
+                # figure out it's length in Minutes
+                ## TODO: check if ffpobe option which would be faster (https://stackoverflow.com/questions/3844430/how-to-get-the-duration-of-a-video-in-python)
+                clip = VideoFileClip(pathname)
+                # clip.duration is in seconds: converting to minutes and rounding up
+                duration = math.ceil((clip.duration)/60)
+                add_movie(pathname, duration)
 
 def add_movie(file, duration):
     """
@@ -164,29 +188,3 @@ def sqlite_string(strings):
     for string in strings:
         string.replace("'", "''")
     return strings[0], strings[1], strings[2]
-
-
-def descend_directories(top):
-    """
-    (string) --> None
-
-    recursively descend the given directory tree and calling the add_movie function for each film file.
-    """
-    movie_extensions = (".AVI", ".avi", ".FLV", ".flv", ".WMV", ".wmv", ".MOV", ".mov", ".MP4", ".mp4")
-
-    for item in os.listdir(top):
-        # does this automatically add the \ or / to the path?
-        pathname = os.path.join(top, item)
-        mode = os.stat(pathname)[ST_MODE]
-        # if item is directory, recurse into it
-        if S_ISDIR(mode):
-            descend_directories(pathname)
-        # if item is a regular file: check if it is a film file
-        elif S_ISREG(mode):
-            if pathname.endswith(movie_extensions):
-                # figure out it's length in Minutes
-                ## TODO: check if ffpobe option which would be faster (https://stackoverflow.com/questions/3844430/how-to-get-the-duration-of-a-video-in-python)
-                clip = VideoFileClip(pathname)
-                # clip.duration is in seconds: converting to minutes and rounding up
-                duration = math.ceil((clip.duration)/60)
-                add_movie(item, duration)
