@@ -75,7 +75,7 @@ def descend_directories(top):
                 clip = VideoFileClip(pathname)
                 # clip.duration is in seconds: converting to minutes and rounding up
                 duration = math.ceil((clip.duration)/60)
-                add_movie(pathname, duration)
+                add_movie(item, duration)
 
 def add_movie(file, duration):
     """
@@ -87,21 +87,24 @@ def add_movie(file, duration):
     This data is collected with an API to an online database of The Movie DB and is saved in the local movie database.
     """
     information = {"countries" : [], "directors" : [], "genres" : []}
-    match = False
-
     name = file[:-4]
+    print(name)
+    #TODO: have option for titles like from Dennis that contain the year and quality of movie as well.
     # replace all '_' or'-' with whitespaces
     name = name.replace('_', ' ')
     name = name.replace('-', ' ')
 
     parameters_search = {"api_key" : APIKey, "query" : name}
-    res_search = requests.get("https://api.themoviedb.org/3/search/movie?api_key=", params=parameters_search)
+    res_search = requests.get("https://api.themoviedb.org/3/search/movie", params=parameters_search)
 
     if res_search:
+        print("got answer from API")
         res_search_json = res_search.json()
         for res in res_search_json["results"]:
+            print(res)
             # we check with fuzzywuzzy if the matching ratio is above 90% to allow some typos but to be strict
             match_ratio = fuzz.ratio(name, res["title"])
+            print(match_ratio)
             if match_ratio > 90:
                 movie_id = res["id"]
                 # get more info about movie by it's id
@@ -117,7 +120,7 @@ def add_movie(file, duration):
                     # only get year and turn string into int
                     information["year"] = int((res["release_date"])[:4])
                     for genre in res_movie_json["genres"]:
-                        information["genre"].append(genre["name"])
+                        information["genres"].append(genre["name"])
                     for country in res_movie_json["production_countries"]:
                         information["countries"].append(country["iso_3166_1"])
                     # get url of first backdrop image and save it
@@ -133,13 +136,18 @@ def add_movie(file, duration):
                     for person in crew:
                         if person["job"] == "Director":
                             information["directors"].append(person["name"])
-                    match = True
-    save_in_db(match, information)
+                    save_in_db(information)
+                else:
+                    print("duration doesn't match")
+            else: 
+                print("title doesn't match")
+    else: 
+        print("no API-results")
+                
 
-
-def save_in_db(match, info):
+def save_in_db(info):
     """
-    (boolean, dictionary) --> None
+    (dictionary) --> None
 
     Saves the retrieved information from The Movie DB in the local SQLite3 DB if a matching movie is found.
     """
@@ -149,32 +157,29 @@ def save_in_db(match, info):
     cur=conn.cursor()
 
     # TODO: get out all repetitions in the code
-    if match == True:
-        cur.execute("INSERT OR IGNORE INTO year (year) VALUES(%i)",(info["year"], ))
-        cur.execute("SELECT y_id FROM year WHERE year=%i",(info["year"], ))
-        y_id = cur.fetchone()[0]
-        # clean the strings to work with sql
-        plot_cleaned, title_cleaned, or_title_cleaned = sqlite_string([info["plot"], info["title"], info["original_title"]])
-        cur.execute("INSERT OR IGNORE INTO movie (original_title, title, duration, image_link, plot, y_id) VALUES(%s, %s, %i, %s, %s, %i)",(or_title_cleaned, title_cleaned, info["duration"], info["image_link"], plot_cleaned, y_id))
-        cur.execute("SELECT g_id FROM movie WHERE title=%s",(title_cleaned, ))
-        m_id = cur.fetchone()[0]
-        for genre in info["genres"]:
-            cur.execute("INSERT OR IGNORE INTO genre (name_genre) VALUES(%s)",(genre, ))
-            cur.execute("SELECT g_id FROM genre WHERE name_genre=%s",(genre, ))
-            g_id = cur.fetchone()[0]
-            cur.execute("INSERT INTO defined_as VALUES(%i, %i)",(m_id, g_id))
-        for country in info["countries"]:
-            cur.execute("INSERT OR IGNORE INTO country (abbreviation_country) VALUES(%s)",(country, ))
-            cur.execute("SELECT g_id FROM genre WHERE name_genre=%s",(country, ))
-            c_id = cur.fetchone()[0]
-            cur.execute("INSERT INTO produced_in VALUES(%i, %i)",(m_id, c_id))
-        for director in info["directors"]:
-            cur.execute("INSERT OR IGNORE INTO director (name_director) VALUES(%s)",(director, ))
-            cur.execute("SELECT g_id FROM director WHERE name_director=%s",(director, ))
-            d_id = cur.fetchone()[0]
-            cur.execute("INSERT INTO directed_by VALUES(%i, %i)",(m_id, d_id))
-    else: 
-        print("Movie is not found.")
+    cur.execute("INSERT OR IGNORE INTO year (year) VALUES(%i)",(info["year"], ))
+    cur.execute("SELECT y_id FROM year WHERE year=%i",(info["year"], ))
+    y_id = cur.fetchone()[0]
+    # clean the strings to work with sql
+    plot_cleaned, title_cleaned, or_title_cleaned = sqlite_string([info["plot"], info["title"], info["original_title"]])
+    cur.execute("INSERT OR IGNORE INTO movie (original_title, title, duration, image_link, plot, y_id) VALUES(%s, %s, %i, %s, %s, %i)",(or_title_cleaned, title_cleaned, info["duration"], info["image_link"], plot_cleaned, y_id))
+    cur.execute("SELECT g_id FROM movie WHERE title=%s",(title_cleaned, ))
+    m_id = cur.fetchone()[0]
+    for genre in info["genres"]:
+        cur.execute("INSERT OR IGNORE INTO genre (name_genre) VALUES(%s)",(genre, ))
+        cur.execute("SELECT g_id FROM genre WHERE name_genre=%s",(genre, ))
+        g_id = cur.fetchone()[0]
+        cur.execute("INSERT INTO defined_as VALUES(%i, %i)",(m_id, g_id))
+    for country in info["countries"]:
+        cur.execute("INSERT OR IGNORE INTO country (abbreviation_country) VALUES(%s)",(country, ))
+        cur.execute("SELECT g_id FROM genre WHERE name_genre=%s",(country, ))
+        c_id = cur.fetchone()[0]
+        cur.execute("INSERT INTO produced_in VALUES(%i, %i)",(m_id, c_id))
+    for director in info["directors"]:
+        cur.execute("INSERT OR IGNORE INTO director (name_director) VALUES(%s)",(director, ))
+        cur.execute("SELECT g_id FROM director WHERE name_director=%s",(director, ))
+        d_id = cur.fetchone()[0]
+        cur.execute("INSERT INTO directed_by VALUES(%i, %i)",(m_id, d_id))
     conn.commit()
     conn.close()
 
