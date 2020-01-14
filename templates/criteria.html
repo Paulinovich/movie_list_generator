@@ -10,6 +10,10 @@
     -->
 
 {% block body %}
+    <nav>
+        <a href="{{ url_for('index') }}">start page</a>
+    </nav>
+
     <h1>Movie selector</h1>     
     {% if not names_set %}
         <form action="{{ url_for('criteria')}}" method="POST">

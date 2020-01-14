@@ -105,6 +105,7 @@ def movie_info_selection(list_movies):
 
         all_information.append(information)
     conn.close()
+    print(all_information)
     return all_information
 
 

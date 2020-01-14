@@ -2,6 +2,9 @@
 
 
 {% block body %}
+    <nav>
+        <a href="{{ url_for('index') }}">start page</a>
+    </nav>
 
     <h1>Create your data base</h1>
 
@@ -10,6 +13,8 @@
 
      <form action="{{ url_for('dbsetup') }}" method="post">
         <label>Enter the parent directory where you store all your movies.</label>
+        <!-- TODO: input with browsing to folder without errors.
+            https://stackoverflow.com/questions/12942436/how-to-get-folder-directory-from-html-input-type-file-or-any-other-way -->
         <input type="text" name="directory" placeholder="Top directory" autofocus required>
         <button name="makeDB">Submit</button>
 

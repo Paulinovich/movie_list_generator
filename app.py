@@ -2,6 +2,7 @@ from flask import Flask, redirect, render_template, request, session, url_for
 from flask_session.__init__ import Session
 import database as db, random_selection_db as rsdb
 import random
+import json
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -85,7 +86,7 @@ def movieselector():
     names = session.get("names")
     maxlength = session.get("maxlength")
     list_movies = rsdb.select_movies(names, maxlength)
-    information = rsdb.movie_info_selection(list_movies)
+    information = json.dumps(rsdb.movie_info_selection(list_movies))
     return render_template("movieselector.html", names=names, information=information)
 
 if __name__ == "__main__":

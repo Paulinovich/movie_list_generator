@@ -2,7 +2,10 @@
 
 
 {% block body %}
-  
+
+    <nav>
+        <a href="{{ url_for('index') }}">start page</a>
+    </nav>
     <!--
         1: movies with their information are shown plus one name at the time (fixed at the top of the browser when scrolling down)
         2: when movie is clicked, pop up window to verify the choice.
@@ -12,61 +15,105 @@
     <div id="picking"><p id="who_picks"></p></div>
 
     <div id="presentation_movies">
-        {% for movie in movie_information %}
-            <!-- part of unique id for every movie is made by first 4 characters of name and the year -->
-            <div class = "movie_info" id="{{ movie['title'][:5]+movie['year']+'_info' }}" onclick="popup({{ movie['title'][:5]+movie['year']+'_popup' }})">
-                <h2>{{ movie["original_title"]}}</h2>
-                <!-- only show original title when it's not the same as the given title above -->
-                {% if movie["original_title"] != movie["title"] %}
-                <p>{{ movie["title"]}} ({{movie["genres"]}})</p>
-                {% else %}
-                <p>({{movie["genres"]}})</p>
-                {% endif %}
-                <br>
-                <p>by {{ movie["directors"]}} ({{ movie["year"]}} - {{movie["countries"]}})</p>
-                <img src="{{ movie['image_link']}}">
-                <p>{{ movie["plot"]}}</p>
-            </div>
-            <div class="popup" id="{{ movie['title'][:5]+movie['year']+'_popup' }}">
-                <p>Eliminate the movie {{ movie["original_title"]}}?</p>
-                <button onclick="eliminate({{ movie['title'][:5]+movie['year']+'_info' }})">Sure</button>
-                <button onclick="popup({{ movie['title'][:5]+movie['year']+'_popup' }})">Wait, go back!</button>
-            </div>
-        {% endfor %}
     </div>
     <button onclick="updateName()">click</button>
 
-    <script>
-        // writing and updating name of choosing person
-        var indexNames=0;
-        var names = {{names|tojson}};
-        var name = names[indexNames];
-        document.getElementById("who_picks").innerHTML = name;
 
+    <script>
+
+        // writing and updating name of choosing person
+        let indexNames=0;
+        const names = {{names|tojson}};
+        let name = names[indexNames];
+        document.getElementById("who_picks").innerHTML = name;
+    
         function nextName(){
             if (indexNames < names.length-1){
                 indexNames++;
                 name = names[indexNames];
             }
         }
-
+    
         function updateName(){
             nextName();
             document.getElementById("who_picks").innerHTML = name;
         }
-
+    
         // movie information display and hiding
         // converting 'information' into json representation with proper escaping of special characters for html
-        var movie_information = JSON.parse('{{information | tojson | safe}}');
-
         function popup(id){
-            var el = document.getElementById("\""+id+"\"");
+            const el = document.getElementById("\""+id+"\"");
             el.classList.toggle("show");
         }
-
+    
         function eliminate(id){
-            var el = document.getElementById("\""+id+"\"");
+            const el = document.getElementById("\""+id+"\"");
             el.classList.add("eliminated");
         }
+    
+        function presentation_movies(movie_information){
+            const parent = document.getElementById("presentation_movies");
+            for (let movie of movie_information){
+                const movie_info = document.createElement("div");
+                // part of the unique id for every movie is made by first 4 characters of name and the year
+                const info_id = movie["title"].slice(0,5)+movie["year"]+"_info";
+                const popup_id = movie["title"].slice(0,5)+movie["year"]+"_popup";
+                movie_info.setAttribute("id",  info_id); 
+                movie_info.setAttribute("class", "movie_info"); 
+                movie_info.setAttribute("onclick", "popup(popup_name)");
+                const h2_text = document.createTextNode(movie["title"]);
+                const h2 = document.createElement("h2");
+                h2.appendChild(h2_text);
+                // only show  title when it's not the same as the original title
+                let p1_text;
+                if(movie["original_title"]!= movie["title"]){
+                     p1_text = document.createTextNode(movie["original_title"]+"   ("+movie["genres"]+")");
+                }else{
+                     p1_text = document.createTextNode("("+movie["genres"]+")");
+                }
+                const p1 = document.createElement("p");
+                p1.appendChild(p1_text);
+                const br = document.createElement("br");
+                const p2_text = document.createTextNode("by "+movie["directors"]+"   ("+movie["year"]+" - "+movie["countries"]+")");
+                const p2 = document.createElement("p");
+                p2.appendChild(p2_text);
+                const img = document.createElement("img");
+                img.setAttribute("scr", movie["image_link"]);
+                const p3_text = document.createTextNode(movie["plot"]);
+                const p3 = document.createElement("p");
+                p3.appendChild(p3_text);
+    
+                const popup = document.createElement("div");
+                popup.setAttribute("class", "popup");
+                popup.setAttribute("id", popup_id);
+                const p4 = document.createElement("p");
+                const p4_text = document.createTextNode("Eliminate the movie "+movie["title"]+"?");
+                p4.appendChild(p4_text);
+                const button1 = document.createElement("button");
+                const button1_text = document.createTextNode("Sure");
+                button1.appendChild(button1_text);
+                button1.setAttribute("onclick", "eliminate(info_id)");
+                const button2 = document.createElement("button");
+                const button2_text = document.createTextNode("Wait, go back!");
+                button2.appendChild(button2_text);
+                button2.setAttribute("onclick", "popup("+popup_id+")");
+
+                movie_info.appendChild(h2);
+                movie_info.appendChild(p1);
+                movie_info.appendChild(br);
+                movie_info.appendChild(p2);
+                movie_info.appendChild(img);
+                movie_info.appendChild(p3);
+                popup.appendChild(p4);
+                popup.appendChild(button1);
+                popup.appendChild(button2);
+                parent.appendChild(movie_info);
+                parent.appendChild(popup);
+            }
+        }
+        var movie_information = JSON.parse({{ information|tojson|safe }});
+        presentation_movies(movie_information);
     </script>
+    
+
 {% endblock %}
