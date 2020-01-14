@@ -1,11 +1,13 @@
 # movie-list-generator
+
 This program makes a data base from all locally stored movies with information collected from [The Movie DB website](https://www.themoviedb.org/documentation/api) and creates random selections of movies. <br>
 For collective movie watching, every viewer can set a veto against one movie until one movie remains: the one that will be watched. 
 <br><br>Procedurally written in Python using a sqlite database. <br> The programm will be run in a webbrowser on a flask server.  
 
 ## Project status
 
-This project is still in progress and is missing some important functions. It can therefor not be run yet. 
+This project still has a lot of bugs, mostly within the JavaScript functions. <br>
+It can therefor not be run successfully yet.
 
 
 ## Contributing
