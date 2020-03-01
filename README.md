@@ -6,8 +6,7 @@ For collective movie watching, every viewer can set a veto against one movie unt
 
 ## Project status
 
-This project still has a lot of bugs, mostly within the JavaScript functions. <br>
-It can therefor not be run successfully yet.
+This project still has bugs, mostly within the JavaScript functions. <br>
 
 
 ## Contributing
