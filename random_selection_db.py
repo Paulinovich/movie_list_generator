@@ -14,14 +14,14 @@ def select_movies(list_names, max_length):
     conn=sqlite3.connect(db_path)
     cur=conn.cursor()
     
-    size=len(list_names)+1
+    size_selection=len(list_names)+1
     list_movies=[]
     cur.execute('SELECT COUNT(*) FROM movie')
     length_db = cur.fetchone()[0]
-        #when no maximum length is given
+    #when no maximum length is given
     if max_length==None:
-        if size <= length_db:
-            cur.execute('SELECT m_id FROM movie ORDER BY RANDOM() LIMIT(?)',(size, ))
+        if size_selection <= length_db:
+            cur.execute('SELECT m_id FROM movie ORDER BY RANDOM() LIMIT(?)',(size_selection, ))
             for mov in cur:
                 list_movies.append(mov[0])  
         else:
@@ -30,8 +30,9 @@ def select_movies(list_names, max_length):
             exit()
     #selecting based on the maximum length
     else:
+        print(max_length)
         try: 
-            cur.execute('SELECT m_id FROM movie WHERE length<=? ORDER BY RANDOM() LIMIT(?)',(max_length, size))
+            cur.execute('SELECT m_id FROM movie WHERE duration<=? ORDER BY RANDOM() LIMIT(?)',(max_length, size_selection))
             for mov in cur:
                 list_movies.append(mov[0])     
         except:
@@ -39,7 +40,6 @@ def select_movies(list_names, max_length):
             conn.close()
             exit()
     conn.close() 
-    print(list_movies)
     return list_movies
     
 def movie_info_selection(list_movies):
@@ -105,9 +105,7 @@ def movie_info_selection(list_movies):
 
         all_information.append(information)
     conn.close()
-    print(all_information)
     return all_information
-
 
 
 

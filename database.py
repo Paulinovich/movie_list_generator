@@ -15,7 +15,6 @@ def create_mdb():
 
     Creates the movie database with all the tables from scratch.
 
-    #TO CONSIDER: having option for user to create a new database (even when it already existed)?
     """
     base_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(base_dir, "movie_db.sqlite") 

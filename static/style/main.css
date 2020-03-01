@@ -1,5 +1,11 @@
 #picking{
     position: fixed;
+    color: red;
+    width: 100%;
+}
+
+#who_picks{
+    text-align: center;
 }
 
 .movie_info{
